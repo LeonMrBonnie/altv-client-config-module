@@ -1,5 +1,6 @@
 #include "runtime.h"
 #include "resource.h"
+#include "parser.h"
 
 alt::IResource::Impl* ConfigRuntime::CreateImpl(alt::IResource* impl)
 {
