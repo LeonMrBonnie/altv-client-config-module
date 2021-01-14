@@ -30,6 +30,8 @@ void File::Parse()
 
         // Parse Main
         ParseMain();
+
+        // todo: custom functions, variables, event handlers, natives
     }    
     catch(...) {}
 }
