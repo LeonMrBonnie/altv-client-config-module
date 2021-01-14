@@ -2,23 +2,15 @@
 
 bool ConfigResource::Start()
 {
-    // Read main file
-    auto pkg = resource->GetPackage();
-    alt::IPackage::File* main = pkg->OpenFile(resource->GetMain());
-    alt::String src(pkg->GetFileSize(main));
-    pkg->ReadFile(main, src.GetData(), src.GetSize());
-    pkg->CloseFile(main);
-
-    // Parse config
-    alt::config::Parser parser(src.CStr(), src.GetSize());
     try
     {
-        auto config = parser.Parse();
-        Parse(config);
+        auto main = resource->GetMain().ToString();
+        auto config = ReadConfig(main);
+        Parse(main, config);
     }
     catch(const alt::config::Error& e)
     {
-        Log::Error << "Error while parsing main file:" << Log::Endl;
+        Log::Error << "Error while parsing:" << Log::Endl;
         Log::Error << e.what() << Log::Endl;
         return false;
     }
@@ -26,10 +18,34 @@ bool ConfigResource::Start()
     return true;
 }
 
-void ConfigResource::Parse(alt::config::Node config)
+alt::config::Node ConfigResource::ReadConfig(std::string file)
 {
+    auto pkg = resource->GetPackage();
+    alt::IPackage::File* pkgFile = pkg->OpenFile(file);
+    alt::String src(pkg->GetFileSize(pkgFile));
+    pkg->ReadFile(pkgFile, src.GetData(), src.GetSize());
+    pkg->CloseFile(pkgFile);
+
+    alt::config::Parser parser(src.CStr(), src.GetSize());
+    return parser.Parse();
+}
+
+void ConfigResource::Parse(std::string file, alt::config::Node config)
+{
+    loadedFiles.emplace_back(file);
+    try {
+        auto includes = config["includes"].ToList();
+        for(auto include : includes)
+        {
+            auto name = include.ToString();
+            if(std::find(loadedFiles.begin(), loadedFiles.end(), name) != loadedFiles.end()) continue;
+            auto includeConfig = ReadConfig(name);
+            Parse(name, includeConfig);
+        }
+    }
+    catch(...) {}
     Log::Info << config["test"].ToString().c_str() << Log::Endl;
-    // TODO: Parse config
+  // TODO: Parse config
 }
 
 bool ConfigResource::Stop()

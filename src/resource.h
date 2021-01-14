@@ -11,6 +11,7 @@ class ConfigResource : public alt::IResource::Impl
     ConfigRuntime* runtime;
     alt::IResource* resource;
 
+    std::vector<std::string> loadedFiles;
     //using EventHandler = std::function<void>;
     //std::unordered_multimap<alt::CEvent::Type, EventHandler> eventHandlers;
     std::unordered_multimap<alt::INative*, alt::Array<void*>> tickNatives;
@@ -28,5 +29,6 @@ public:
     void OnCreateBaseObject(alt::IBaseObject* object) {}
     void OnRemoveBaseObject(alt::IBaseObject* object) {}
 
-    void Parse(alt::config::Node config);
+    void Parse(std::string file, alt::config::Node config);
+    alt::config::Node ReadConfig(std::string file);
 };
