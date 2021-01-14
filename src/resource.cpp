@@ -1,5 +1,5 @@
 #include "resource.h"
-#include "parser.h"
+#include "parser/parser.h"
 
 bool ConfigResource::Start()
 {

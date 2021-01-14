@@ -3,7 +3,7 @@
 #include "cpp-sdk/SDK.h"
 #include "alt-config/alt-config.h"
 #include "Log.h"
-#include "natives.h"
+#include "util/natives.h"
 
 class ConfigRuntime;
 class ConfigResource : public alt::IResource::Impl
@@ -15,6 +15,7 @@ class ConfigResource : public alt::IResource::Impl
     //using EventHandler = std::function<void>;
     //std::unordered_multimap<alt::CEvent::Type, EventHandler> eventHandlers;
     std::unordered_multimap<alt::INative*, alt::Array<void*>> tickNatives;
+    std::unordered_map<std::string, void*> variables;
 
 public:
     ConfigResource(ConfigRuntime* runtime, alt::IResource* resource) : runtime(runtime), resource(resource) {};
