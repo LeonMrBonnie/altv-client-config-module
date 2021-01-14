@@ -21,18 +21,17 @@ void File::Parse()
 {
     try {
         // Load includes
-        auto includes = config["includes"];
-        ParseIncludes(includes);
+        ParseIncludes();
 
         // Load every tick natives
-        auto natives = config["everyTick"];
-        ParseNatives(natives);
+        ParseNatives();
     }    
     catch(...) {}
 }
 
-void File::ParseIncludes(alt::config::Node includes)
+void File::ParseIncludes()
 {
+    auto includes = config["includes"];
     if(!includes.IsList()) return;
     for(auto include : includes.ToList())
     {
@@ -42,8 +41,9 @@ void File::ParseIncludes(alt::config::Node includes)
     }
 }
 
-void File::ParseNatives(alt::config::Node natives)
+void File::ParseNatives()
 {
+    auto natives = config["everyTick"];
     if(!natives.IsList()) return;
     // todo: Parse natives
 }

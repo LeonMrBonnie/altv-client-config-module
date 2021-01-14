@@ -12,8 +12,8 @@ namespace Parser
         std::string name;
         alt::config::Node config;
 
-        void ParseIncludes(alt::config::Node includes);
-        void ParseNatives(alt::config::Node natives);
+        void ParseIncludes();
+        void ParseNatives();
 
     public:
         File(ConfigResource* resource, std::string name);
