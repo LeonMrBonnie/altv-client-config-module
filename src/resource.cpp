@@ -28,7 +28,7 @@ bool ConfigResource::Start()
 
 void ConfigResource::Parse(alt::config::Node config)
 {
-    //Log::Info << config["test"].ToString().c_str() << Log::Endl;
+    Log::Info << config["test"].ToString().c_str() << Log::Endl;
     // TODO: Parse config
 }
 
@@ -41,4 +41,14 @@ bool ConfigResource::OnEvent(const alt::CEvent* ev)
 {
     //Log::Info << "Event received: " << std::to_string((uint16_t)ev->GetType()) << Log::Endl;
     return true;
+}
+
+void ConfigResource::OnTick()
+{
+    static auto ctx = alt::ICore::Instance().CreateNativesContext();
+
+    for(auto native : tickNatives)
+    {
+        Natives::Invoke(ctx.Get(), native.first, native.second);
+    }
 }
