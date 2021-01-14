@@ -5,6 +5,4 @@
 // SDK
 #include "cpp-sdk/SDK.h"
 
-// Files
 #include "runtime.h"
-#include "resource.h"
