@@ -29,6 +29,11 @@ public:
     void OnCreateBaseObject(alt::IBaseObject* object) {}
     void OnRemoveBaseObject(alt::IBaseObject* object) {}
 
-    void Parse(std::string file, alt::config::Node config);
+    /* Config Parsing */
+    // Reads config file
     alt::config::Node ReadConfig(std::string file);
+    void ParseConfig(std::string file, alt::config::Node config);
+    
+    void ParseIncludes(alt::config::Node includes);
+    void ParseNatives(alt::config::Node natives);
 };
