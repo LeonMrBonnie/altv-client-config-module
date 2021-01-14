@@ -1,4 +1,5 @@
 #include "resource.h"
+#include "parser.h"
 
 bool ConfigResource::Start()
 {
@@ -6,8 +7,7 @@ bool ConfigResource::Start()
     {
         // Read and parse main file
         auto main = resource->GetMain().ToString();
-        auto config = ReadConfig(main);
-        ParseConfig(main, config);
+        LoadFile(main);
     }
     catch(const alt::config::Error& e)
     {
@@ -41,52 +41,11 @@ void ConfigResource::OnTick()
     }
 }
 
-
-alt::config::Node ConfigResource::ReadConfig(std::string file)
+void ConfigResource::LoadFile(std::string name)
 {
-    auto pkg = resource->GetPackage();
-    alt::IPackage::File* pkgFile = pkg->OpenFile(file);
-    alt::String src(pkg->GetFileSize(pkgFile));
-    pkg->ReadFile(pkgFile, src.GetData(), src.GetSize());
-    pkg->CloseFile(pkgFile);
+    if(std::find(loadedFiles.begin(), loadedFiles.end(), name) != loadedFiles.end()) return;
+    loadedFiles.emplace_back(name);
 
-    alt::config::Parser parser(src.CStr(), src.GetSize());
-    return parser.Parse();
-}
-
-void ConfigResource::ParseConfig(std::string file, alt::config::Node config)
-{
-    // Add file to loaded files to avoid infinite include recursion
-    loadedFiles.emplace_back(file);
-
-    try {
-        // Load includes
-        auto includes = config["includes"];
-        ParseIncludes(includes);
-
-        // Load every tick natives
-        auto natives = config["everyTick"];
-        ParseNatives(natives);
-    }    
-    catch(...) {}
-}
-
-void ConfigResource::ParseIncludes(alt::config::Node includes)
-{
-    if(!includes.IsList()) return;
-    for(auto include : includes.ToList())
-    {
-        auto name = include.ToString();
-        // Check if include is already loaded
-        if(std::find(loadedFiles.begin(), loadedFiles.end(), name) != loadedFiles.end()) continue;
-        // Read and parse the include
-        auto includeConfig = ReadConfig(name);
-        ParseConfig(name, includeConfig);
-    }
-}
-
-void ConfigResource::ParseNatives(alt::config::Node natives)
-{
-    if(!natives.IsList()) return;
-    // todo: Parse natives
+    Parser::File file(this, name);
+    file.Parse();
 }

@@ -19,6 +19,11 @@ class ConfigResource : public alt::IResource::Impl
 public:
     ConfigResource(ConfigRuntime* runtime, alt::IResource* resource) : runtime(runtime), resource(resource) {};
     ~ConfigResource() = default;
+    alt::IResource* GetResource()
+    {
+        return resource;
+    }
+    void LoadFile(std::string file);
 
     bool Start();
     bool Stop();
@@ -28,12 +33,5 @@ public:
 
     void OnCreateBaseObject(alt::IBaseObject* object) {}
     void OnRemoveBaseObject(alt::IBaseObject* object) {}
-
-    /* Config Parsing */
-    // Reads config file
-    alt::config::Node ReadConfig(std::string file);
-    void ParseConfig(std::string file, alt::config::Node config);
-    
-    void ParseIncludes(alt::config::Node includes);
-    void ParseNatives(alt::config::Node natives);
 };
+
