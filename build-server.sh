@@ -11,5 +11,5 @@ if [ ! -d "./dist/server" ]; then
     mkdir dist/server
 fi
 
-cp build\linux64\server\Release\altv-config-module.so dist\server
-#cp build\linux64\server\Release\altv-config-module.pdb dist\server
+cp build\linux64\server\Release\config-module.so dist\server
+#cp build\linux64\server\Release\config-module.pdb dist\server

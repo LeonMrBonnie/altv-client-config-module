@@ -12,5 +12,5 @@ IF NOT EXIST dist\ (
 IF NOT EXIST dist\server\ (
     mkdir dist\server
 )
-copy build\win64\server\Release\altv-config-module.dll dist\server
-copy build\win64\server\Release\altv-config-module.pdb dist\server
+copy build\win64\server\Release\config-module.dll dist\server
+copy build\win64\server\Release\config-module.pdb dist\server
