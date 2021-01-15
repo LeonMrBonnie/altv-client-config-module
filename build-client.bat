@@ -12,5 +12,5 @@ IF NOT EXIST dist\ (
 IF NOT EXIST dist\client\ (
     mkdir dist\client
 )
-copy build\win64\client\Release\altv-config-module.dll dist\client
-copy build\win64\client\Release\altv-config-module.pdb dist\client
+copy build\win64\client\Release\config-module.dll dist\client
+copy build\win64\client\Release\config-module.pdb dist\client
