@@ -2,37 +2,34 @@
 
 #include "Log.h"
 #include "alt-config/alt-config.h"
+#include "funcs.h"
 
 class ConfigResource;
 namespace Parser
 {
-    using FuncHandler = void(*)(alt::Array<alt::config::Node> args);
-    static std::map<std::string, FuncHandler> funcs;
-
-    class Func
-    {
-    public:
-        Func(std::string name, FuncHandler handler)
-        {
-            funcs.insert({name, handler});
-        }
+    static const std::map<std::string, alt::CEvent::Type> events = {
+        { "resourceStart", alt::CEvent::Type::RESOURCE_START },
+        { "resourceStop", alt::CEvent::Type::RESOURCE_STOP },
+        #ifdef SERVER_MODULE
+        { "playerConnect", alt::CEvent::Type::PLAYER_CONNECT },
+        { "playerDisconnect", alt::CEvent::Type::PLAYER_DISCONNECT},
+        #endif
+        { "consoleCommand", alt::CEvent::Type::CONSOLE_COMMAND_EVENT }
     };
+    static alt::CEvent::Type GetEventType(std::string eventName);
 
     class File
     {
         ConfigResource* resource;
         std::string name;
         alt::config::Node config;
-        void CallFunction(std::string name, alt::Array<alt::config::Node> args);
-
-        bool IsFunction(std::string name);
-        //bool IsVariable(std::string name);
 
         void ParseMain();
         void ParseIncludes();
         #ifdef CLIENT_MODULE
         void ParseNatives();
         #endif
+        void ParseEventHandlers();
 
     public:
         File(ConfigResource* resource, std::string name);

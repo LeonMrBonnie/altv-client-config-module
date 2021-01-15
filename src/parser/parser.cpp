@@ -3,6 +3,17 @@
 
 using namespace Parser;
 
+alt::CEvent::Type Parser::GetEventType(std::string eventName)
+{
+    try {
+        return events.at(eventName);
+    }
+    catch(...)
+    {
+        return alt::CEvent::Type::NONE;
+    }
+}
+
 File::File(ConfigResource* resource, std::string name)
 : resource(resource),
   name(name)
@@ -32,6 +43,9 @@ void File::Parse()
 
         // Parse Main
         ParseMain();
+
+        // Parse event handlers
+        ParseEventHandlers();
 
         // todo: custom functions, variables, event handlers, natives
     }    
@@ -63,23 +77,32 @@ void File::ParseMain()
 {
     auto main = config["main"];
     if(!main.IsList()) return;
+    // Get all functions out of the list
     for(auto node : main.ToList())
     {
-        if(!node.IsDict()) continue;
-        auto func = node["function"];
-        if(!func.IsScalar()) {
-            Log::Error << "Invalid dict passed to main list" << Log::Endl;
-            return;
-        }
-        auto args = node["args"];
-        alt::Array<alt::config::Node> argsArray;
-        if(args.IsList())
+        // Parse the function
+        auto func = Parser::Function::Parse(node, resource);
+        if(func.first == nullptr) continue;
+        // Call the function
+        func.first->Call(func.second);
+    }
+}
+
+void File::ParseEventHandlers()
+{
+    auto handlers = config["eventHandlers"];
+    if(!handlers.IsDict()) return;
+    auto dict = handlers.ToDict();
+    for(auto node : dict)
+    {
+        if(!node.second.IsList()) continue;
+        auto event = Parser::GetEventType(node.first);
+        if(event == alt::CEvent::Type::NONE) continue;
+        for(auto func : node.second.ToList())
         {
-            for(auto arg : args.ToList())
-            {
-               argsArray.Push(arg);
-            }
+            auto pair = Function::Parse(func, resource);
+            if(pair.first == nullptr) continue;
+            resource->RegisterEventFunc(event, pair.first, pair.second);
         }
-        CallFunction(func.ToString(), argsArray);
     }
 }

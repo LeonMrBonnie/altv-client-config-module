@@ -1,29 +1,55 @@
 #include "parser.h"
+#include "funcs.h"
 
 using namespace Parser;
 
-void File::CallFunction(std::string name, alt::Array<alt::config::Node> args)
+std::vector<Function*> Function::all = std::vector<Function*>();
+
+std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigResource* resource)
 {
-    auto func = Parser::funcs.find(name);
-    if(func == Parser::funcs.end())
-    {
-        Log::Error << "Tried to call invalid function: " << name.c_str() << Log::Endl;
-        return;
+    if(!node.IsDict()) return std::pair(nullptr, ArgsArray());
+    auto func = node["function"];
+    if(!func.IsScalar()) {
+        Log::Error << "Invalid dict passed to function list" << Log::Endl;
+        return std::pair(nullptr, ArgsArray());
     }
-    func->second(args);
+    auto args = node["args"];
+    alt::Array<alt::config::Node> argsArray;
+    if(args.IsList())
+    {
+        for(auto arg : args.ToList())
+        {
+            // todo: parse variables
+            argsArray.Push(arg);
+        }
+    }
+
+    auto found = Get(func.ToString());
+    // todo: add custom funcs to resource
+    if(found == nullptr) 
+    {
+        Log::Error << "Invalid function: " << func.ToString() << Log::Endl;
+        return std::pair(nullptr, ArgsArray());
+    }
+    return std::pair(found, argsArray);
 }
 
-bool File::IsFunction(std::string name)
+Function* Function::Get(std::string name)
 {
-    bool found = false;
-    if(Parser::funcs.find(name) != Parser::funcs.end()) found = true;
-    // todo: add custom funcs to resource
-    //else if(resource->customFuncs.find(name) != resource->customFuncs.end()) found = true;
-    return found;
+    for(auto func : all)
+    {
+        if(func->name == name) return func;
+    }
+    return nullptr;
+}
+
+void Function::Call(ArgsArray args)
+{
+    this->handler(args);
 }
 
 // Funcs
-Parser::Func logFunc("log", [](alt::Array<alt::config::Node> args) {
+Parser::Function logFunc("log", [](alt::Array<alt::config::Node> args) {
     for(auto arg : args)
     {
         Log::Colored << arg.ToString() << " ";
@@ -31,7 +57,7 @@ Parser::Func logFunc("log", [](alt::Array<alt::config::Node> args) {
     Log::Colored << Log::Endl;
 });
 
-Parser::Func logWarnFunc("logWarning", [](alt::Array<alt::config::Node> args) {
+Parser::Function logWarnFunc("logWarning", [](alt::Array<alt::config::Node> args) {
     for(auto arg : args)
     {
         Log::Warning << arg.ToString() << " ";
@@ -39,7 +65,7 @@ Parser::Func logWarnFunc("logWarning", [](alt::Array<alt::config::Node> args) {
     Log::Warning << Log::Endl;
 });
 
-Parser::Func logErrorFunc("logError", [](alt::Array<alt::config::Node> args) {
+Parser::Function logErrorFunc("logError", [](alt::Array<alt::config::Node> args) {
     for(auto arg : args)
     {
         Log::Error << arg.ToString() << " ";

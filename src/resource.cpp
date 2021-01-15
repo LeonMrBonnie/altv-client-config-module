@@ -21,12 +21,27 @@ bool ConfigResource::Start()
 
 bool ConfigResource::Stop()
 {
+    // Clean up
+    loadedFiles.clear();
+    eventFuncs.clear();
+    #ifdef CLIENT_MODULE
+    tickNatives.clear();
+    #endif
+    
     return true;
 }
 
 bool ConfigResource::OnEvent(const alt::CEvent* ev)
 {
     //Log::Info << "Event received: " << std::to_string((uint16_t)ev->GetType()) << Log::Endl;
+    auto funcs = eventFuncs.equal_range(ev->GetType());
+    for(auto it = funcs.first; it != funcs.second; ++it)
+    {
+       for(auto func : it->second)
+       {
+           func.first->Call(func.second);
+       }
+    }
     return true;
 }
 
