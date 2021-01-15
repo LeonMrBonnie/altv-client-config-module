@@ -10,7 +10,7 @@ Even though this module is really simple, it *should be* very fast, as the whole
 
 ## How to build
 
-Make sure to fetch the submodules and then run `build.bat`. This will compile the project and copy the created `.dll` into the `dist` directory.
+Make sure to fetch the submodules and then run `build-client.bat` or `build-server.bat` (on Unix systems: `build-server.sh`). This will compile the project and copy the created `.dll` or `.so` into the `dist/client` or `dist/server` directory.
 
 ## How to contribute
 
