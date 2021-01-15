@@ -3,6 +3,7 @@
 ## What is this
 
 This is a module allowing it to create simple alt:V resources using `.cfg` files.<br>
+It can be used both on clientside and on serverside.<br>
 These files use the same format as the `resource.cfg`, `server.cfg` etc.<br>
 This module is *not* meant for complex resources, and is meant to quickly and easily create resources.<br>
 Even though this module is really simple, it *should be* very fast, as the whole code is parsed to C++ code from the config file.

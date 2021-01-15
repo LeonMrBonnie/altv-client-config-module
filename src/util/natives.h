@@ -3,6 +3,7 @@
 #include "cpp-sdk/SDK.h"
 #include "Log.h"
 
+#ifdef CLIENT_MODULE
 class Natives
 {
 public:
@@ -46,3 +47,4 @@ public:
         if(!success) Log::Error << "Error while calling native " << native->GetName().CStr() << Log::Endl;
     }
 };
+#endif

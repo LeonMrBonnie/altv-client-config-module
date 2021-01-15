@@ -25,8 +25,10 @@ void File::Parse()
         // Load includes
         ParseIncludes();
 
+        #ifdef CLIENT_MODULE
         // Load every tick natives
         ParseNatives();
+        #endif
 
         // Parse Main
         ParseMain();
@@ -48,12 +50,14 @@ void File::ParseIncludes()
     }
 }
 
+#ifdef CLIENT_MODULE
 void File::ParseNatives()
 {
     auto natives = config["everyTick"];
     if(!natives.IsList()) return;
     // todo: Parse natives
 }
+#endif
 
 void File::ParseMain()
 {

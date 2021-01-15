@@ -26,11 +26,13 @@ namespace Parser
         void CallFunction(std::string name, alt::Array<alt::config::Node> args);
 
         bool IsFunction(std::string name);
-        bool IsVariable(std::string name);
+        //bool IsVariable(std::string name);
 
-        void ParseIncludes();
-        void ParseNatives();
         void ParseMain();
+        void ParseIncludes();
+        #ifdef CLIENT_MODULE
+        void ParseNatives();
+        #endif
 
     public:
         File(ConfigResource* resource, std::string name);

@@ -32,6 +32,7 @@ bool ConfigResource::OnEvent(const alt::CEvent* ev)
 
 void ConfigResource::OnTick()
 {
+    #ifdef CLIENT_MODULE
     static auto ctx = alt::ICore::Instance().CreateNativesContext();
 
     // Invoke all every tick natives
@@ -39,6 +40,7 @@ void ConfigResource::OnTick()
     {
         Natives::Invoke(ctx.Get(), native.first, native.second);
     }
+    #endif
 }
 
 void ConfigResource::LoadFile(std::string name)

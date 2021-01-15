@@ -9,7 +9,10 @@
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE",
-                "ALT_CLIENT_API"
+                "ALT_CLIENT_API",
+                "ALT_SERVER_API",
+                "CLIENT_MODULE",
+                "SERVER_MODULE"
             ],
             "windowsSdkVersion": "10.0.18362.0",
             "compilerPath": "D:/Programme/Visual Studio/VC/Tools/MSVC/14.28.29333/bin/Hostx64/x64/cl.exe",

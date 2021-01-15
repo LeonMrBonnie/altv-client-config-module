@@ -14,7 +14,9 @@ class ConfigResource : public alt::IResource::Impl
     std::vector<std::string> loadedFiles;
     //using EventHandler = std::function<void>;
     //std::unordered_multimap<alt::CEvent::Type, EventHandler> eventHandlers;
+    #ifdef CLIENT_MODULE
     std::unordered_multimap<alt::INative*, alt::Array<void*>> tickNatives;
+    #endif
     std::unordered_map<std::string, void*> variables;
 
 public:
