@@ -1,8 +1,6 @@
 #include "main.h"
 #include "Log.h"
 
-#define MODULE_TYPE "config"
-
 #ifdef CLIENT_MODULE
 EXPORT alt::IScriptRuntime* CreateScriptRuntime(alt::ICore* core)
 {
