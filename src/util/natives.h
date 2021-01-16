@@ -13,6 +13,7 @@ namespace Util
             if(!native->IsValid()) return;
             auto argTypes = native->GetArgTypes();
 
+            // Get all args the native returns
             for(int i = 0, size = argTypes.GetSize(); i < size; i++)
             {
                 auto argType = argTypes[i];
@@ -21,6 +22,7 @@ namespace Util
                     ctx->Push(0);
                     continue;
                 }
+                // Push arg after converting to proper type
                 switch(argType)
                 {
                 case alt::INative::Type::ARG_BOOL:
@@ -43,7 +45,8 @@ namespace Util
                     break;
                 }
             }
-
+            
+            // Call the native
             bool success = native->Invoke(ctx);
             if(!success) Log::Error << "Error while calling native " << native->GetName().CStr() << Log::Endl;
         }

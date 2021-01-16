@@ -27,18 +27,21 @@ bool ConfigResource::Stop()
     #ifdef CLIENT_MODULE
     tickNatives.clear();
     #endif
+    // todo: delete custom funcs
+    // todo: delete custom vars
     
     return true;
 }
 
 bool ConfigResource::OnEvent(const alt::CEvent* ev)
 {
-    //Log::Info << "Event received: " << std::to_string((uint16_t)ev->GetType()) << Log::Endl;
+    // Get all functions that should be executed for the current event
     auto funcs = eventFuncs.equal_range(ev->GetType());
     for(auto it = funcs.first; it != funcs.second; ++it)
     {
        for(auto func : it->second)
        {
+           // Call the function with its arguments
            func.first->Call(func.second);
        }
     }
@@ -60,9 +63,12 @@ void ConfigResource::OnTick()
 
 void ConfigResource::LoadFile(std::string name)
 {
+    // Check if file is already loaded
     if(std::find(loadedFiles.begin(), loadedFiles.end(), name) != loadedFiles.end()) return;
+    // Add file to loaded files to avoid recursion
     loadedFiles.emplace_back(name);
 
+    // Parse the file
     Parser::File file(this, name);
     file.Parse();
 }

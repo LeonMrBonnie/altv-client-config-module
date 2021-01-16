@@ -20,6 +20,7 @@ class ConfigResource : public alt::IResource::Impl
     std::unordered_multimap<alt::INative*, alt::Array<void*>> tickNatives;
     #endif
     //std::unordered_map<std::string, void*> variables;
+    //std::vector<Function*> funcs;
 
 public:
     ConfigResource(ConfigRuntime* runtime, alt::IResource* resource) : runtime(runtime), resource(resource) {};

@@ -5,6 +5,7 @@ using namespace Parser;
 
 std::vector<Function*> Function::all = std::vector<Function*>();
 
+// Returns pair with function and args
 std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigResource* resource)
 {
     if(!node.IsDict()) return std::pair(nullptr, ArgsArray());
@@ -14,6 +15,7 @@ std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigRe
     alt::Array<alt::config::Node> argsArray;
     if(args.IsList())
     {
+        // Create an array for the args to the function
         for(auto arg : args.ToList())
         {
             // todo: parse variables
@@ -21,6 +23,7 @@ std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigRe
         }
     }
 
+    // Get function from specified function name
     auto found = Get(func.ToString());
     // todo: add custom funcs to resource
     if(found == nullptr) 
