@@ -53,7 +53,7 @@ void ConfigResource::OnTick()
     // Invoke all every tick natives
     for(auto native : tickNatives)
     {
-        Natives::Invoke(ctx.Get(), native.first, native.second);
+        Util::Natives::Invoke(ctx.Get(), native.first, native.second);
     }
     #endif
 }
