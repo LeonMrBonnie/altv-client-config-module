@@ -8,7 +8,7 @@ namespace Util
 {
     namespace Natives
     {
-        void Invoke(alt::INative::Context* ctx, alt::INative* native, alt::Array<void*> args)
+        static void Invoke(alt::INative::Context* ctx, alt::INative* native, alt::Array<void*> args)
         {
             if(!native->IsValid()) return;
             auto argTypes = native->GetArgTypes();

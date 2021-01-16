@@ -2,7 +2,6 @@
 
 #include "alt-config/alt-config.h"
 #include "Log.h"
-#include "util/config.h"
 
 class ConfigResource;
 namespace Parser

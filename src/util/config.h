@@ -7,15 +7,16 @@ namespace Util
 {
     namespace Config
     {
-        std::string GetNodeType(alt::config::Node node)
+        static std::string GetNodeType(alt::config::Node node)
         {
             if(node.IsScalar()) return "string";
             if(node.IsDict()) return "dict";
             if(node.IsList()) return "list";
             if(node.IsNone()) return "none";
+            return "none";
         }
 
-        bool VerifyNodeType(alt::config::Node node, std::string expectedType, bool showError = true)
+        static bool VerifyNodeType(alt::config::Node node, std::string expectedType, bool showError = true)
         {
             auto type = GetNodeType(node);
             if(expectedType != type)
