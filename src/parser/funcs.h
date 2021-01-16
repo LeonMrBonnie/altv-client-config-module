@@ -12,14 +12,13 @@ namespace Parser
     {
         using FuncHandler = void(*)(alt::Array<alt::config::Node> args);
 
+        static std::vector<Function*> all;
         static Function* Get(std::string name);
 
         std::string name;
         FuncHandler handler;
 
     public:
-        static std::vector<Function*> all;
-
         Function(std::string name, FuncHandler handler)
         : name(name),
           handler(handler)

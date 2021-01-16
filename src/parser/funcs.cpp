@@ -49,7 +49,7 @@ void Function::Call(ArgsArray args)
 }
 
 // Funcs
-Parser::Function logFunc("log", [](alt::Array<alt::config::Node> args) {
+Function logFunc("log", [](alt::Array<alt::config::Node> args) {
     for(auto arg : args)
     {
         Log::Colored << arg.ToString() << " ";
@@ -57,7 +57,7 @@ Parser::Function logFunc("log", [](alt::Array<alt::config::Node> args) {
     Log::Colored << Log::Endl;
 });
 
-Parser::Function logWarnFunc("logWarning", [](alt::Array<alt::config::Node> args) {
+Function logWarnFunc("logWarning", [](alt::Array<alt::config::Node> args) {
     for(auto arg : args)
     {
         Log::Warning << arg.ToString() << " ";
@@ -65,7 +65,7 @@ Parser::Function logWarnFunc("logWarning", [](alt::Array<alt::config::Node> args
     Log::Warning << Log::Endl;
 });
 
-Parser::Function logErrorFunc("logError", [](alt::Array<alt::config::Node> args) {
+Function logErrorFunc("logError", [](alt::Array<alt::config::Node> args) {
     for(auto arg : args)
     {
         Log::Error << arg.ToString() << " ";

@@ -3,17 +3,6 @@
 
 using namespace Parser;
 
-alt::CEvent::Type Parser::GetEventType(std::string eventName)
-{
-    try {
-        return events.at(eventName);
-    }
-    catch(...)
-    {
-        return alt::CEvent::Type::NONE;
-    }
-}
-
 File::File(ConfigResource* resource, std::string name)
 : resource(resource),
   name(name)
@@ -96,13 +85,13 @@ void File::ParseEventHandlers()
     for(auto node : dict)
     {
         if(!node.second.IsList()) continue;
-        auto event = Parser::GetEventType(node.first);
-        if(event == alt::CEvent::Type::NONE) continue;
+        auto event = Parser::Event::Get(node.first);
+        if(event == nullptr) continue;
         for(auto func : node.second.ToList())
         {
             auto pair = Function::Parse(func, resource);
             if(pair.first == nullptr) continue;
-            resource->RegisterEventFunc(event, pair.first, pair.second);
+            resource->RegisterEventFunc(event->GetType(), pair.first, pair.second);
         }
     }
 }
