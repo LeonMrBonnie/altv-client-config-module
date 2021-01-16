@@ -4,6 +4,7 @@
 #include "alt-config/alt-config.h"
 #include "funcs.h"
 #include "events.h"
+#include "util/config.h"
 
 class ConfigResource;
 namespace Parser

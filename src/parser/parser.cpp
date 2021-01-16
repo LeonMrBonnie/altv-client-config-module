@@ -44,7 +44,7 @@ void File::Parse()
 void File::ParseIncludes()
 {
     auto includes = config["includes"];
-    if(!includes.IsList()) return;
+    if(!Util::Config::VerifyNodeType(includes, "list", false)) return;
     for(auto include : includes.ToList())
     {
         auto name = include.ToString();
@@ -57,7 +57,7 @@ void File::ParseIncludes()
 void File::ParseNatives()
 {
     auto natives = config["everyTick"];
-    if(!natives.IsList()) return;
+    if(!Util::Config::VerifyNodeType(natives, "list", false)) return;
     // todo: Parse natives
 }
 #endif
@@ -65,7 +65,7 @@ void File::ParseNatives()
 void File::ParseMain()
 {
     auto main = config["main"];
-    if(!main.IsList()) return;
+    if(!Util::Config::VerifyNodeType(main, "list", false)) return;
     // Get all functions out of the list
     for(auto node : main.ToList())
     {
@@ -80,13 +80,17 @@ void File::ParseMain()
 void File::ParseEventHandlers()
 {
     auto handlers = config["eventHandlers"];
-    if(!handlers.IsDict()) return;
+    if(!Util::Config::VerifyNodeType(handlers, "dict", false)) return;
     auto dict = handlers.ToDict();
     for(auto node : dict)
     {
         if(!node.second.IsList()) continue;
         auto event = Parser::Event::Get(node.first);
-        if(event == nullptr) continue;
+        if(event == nullptr)
+        {
+            Log::Error << "Invalid event specified: " << node.first << Log::Endl;
+            continue;
+        }
         for(auto func : node.second.ToList())
         {
             auto pair = Function::Parse(func, resource);

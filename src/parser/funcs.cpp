@@ -9,10 +9,7 @@ std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigRe
 {
     if(!node.IsDict()) return std::pair(nullptr, ArgsArray());
     auto func = node["function"];
-    if(!func.IsScalar()) {
-        Log::Error << "Invalid dict passed to function list" << Log::Endl;
-        return std::pair(nullptr, ArgsArray());
-    }
+    if(!Util::Config::VerifyNodeType(func, "string")) return std::pair(nullptr, ArgsArray());
     auto args = node["args"];
     alt::Array<alt::config::Node> argsArray;
     if(args.IsList())
@@ -28,7 +25,7 @@ std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigRe
     // todo: add custom funcs to resource
     if(found == nullptr) 
     {
-        Log::Error << "Invalid function: " << func.ToString() << Log::Endl;
+        Log::Error << "Invalid function specified: " << func.ToString() << Log::Endl;
         return std::pair(nullptr, ArgsArray());
     }
     return std::pair(found, argsArray);
