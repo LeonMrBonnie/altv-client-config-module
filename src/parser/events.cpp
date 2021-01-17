@@ -4,13 +4,6 @@ using namespace Parser;
 
 std::vector<Event*> Event::all = std::vector<Event*>();
 
-Event::Event(alt::CEvent::Type type, std::string name)
-: type(type),
-  name(name)
-{
-
-}
-
 Event* Event::Get(std::string name)
 {
     for(auto event : all)

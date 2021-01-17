@@ -14,7 +14,10 @@ namespace Parser
 
     public:
 
-        Event(alt::CEvent::Type type, std::string name);
+        Event(alt::CEvent::Type type, std::string name)
+        : type(type),
+          name(name)
+        {};
 
         alt::CEvent::Type GetType()
         {
