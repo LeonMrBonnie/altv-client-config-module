@@ -8,13 +8,13 @@ namespace Parser
 {
     class Variable
     {
-        using GetterFunc = void* (*)(ConfigResource* resource);
+        using GetterFunc = alt::config::Node (*)(ConfigResource* resource);
         static std::vector<Variable*> all;
 
         std::string name;
         GetterFunc getter;
 
-        void* Value(ConfigResource* resource)
+        alt::config::Node Value(ConfigResource* resource)
         {
             return getter(resource);
         }
@@ -27,7 +27,7 @@ namespace Parser
             all.emplace_back(this);
         }
 
-        static void* Parse(alt::config::Node node, ConfigResource* resource);
+        static alt::config::Node Parse(alt::config::Node node, ConfigResource* resource);
         static Variable* Get(std::string name);
     };
 };

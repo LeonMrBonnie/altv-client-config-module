@@ -19,10 +19,9 @@ std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigRe
         // Create an array for the args to the function
         for(auto arg : args.ToList())
         {
-            // todo: parse variables
-            auto var = Variable::Parse(node, resource);
-            if(var == nullptr) argsArray.Push(arg);
-            else argsArray.Push(alt::config::Node(var));
+            auto var = Variable::Parse(arg, resource);
+            if(!var.IsNone()) argsArray.Push(var);
+            else argsArray.Push(arg);
         }
     }
 
