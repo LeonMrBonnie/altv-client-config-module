@@ -27,6 +27,11 @@ namespace Parser
             all.emplace_back(this);
         }
 
+        std::string GetName()
+        {
+            return name;
+        }
+
         static alt::config::Node Parse(alt::config::Node node, ConfigResource* resource);
         static Variable* Get(std::string name);
     };
