@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "funcs.h"
+#include "vars.h"
 
 using namespace Parser;
 
@@ -19,7 +20,9 @@ std::pair<Function*, ArgsArray> Function::Parse(alt::config::Node node, ConfigRe
         for(auto arg : args.ToList())
         {
             // todo: parse variables
-            argsArray.Push(arg);
+            auto var = Variable::Parse(node, resource);
+            if(var == nullptr) argsArray.Push(arg);
+            else argsArray.Push(alt::config::Node(var));
         }
     }
 
