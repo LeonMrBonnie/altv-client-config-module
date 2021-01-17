@@ -7,16 +7,19 @@ namespace Parser
 {
     class Event
     {
+        using ArgsGetter = alt::Array<void*>(*)(const alt::CEvent* event, alt::Array<void*> args);
         alt::CEvent::Type type;
         std::string name;
+        ArgsGetter argsGetter;
 
         static std::vector<Event*> all;
 
     public:
 
-        Event(alt::CEvent::Type type, std::string name)
+        Event(alt::CEvent::Type type, std::string name, ArgsGetter argsGetter)
         : type(type),
-          name(name)
+          name(name),
+          argsGetter(argsGetter)
         {};
 
         alt::CEvent::Type GetType()
@@ -26,6 +29,10 @@ namespace Parser
         std::string GetName()
         {
             return name;
+        }
+        alt::Array<void*> GetArgs(const alt::CEvent* event)
+        {
+            return argsGetter(event, alt::Array<void*>());
         }
 
         static Event* Get(std::string name);

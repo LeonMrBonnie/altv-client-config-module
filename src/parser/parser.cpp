@@ -95,6 +95,7 @@ void File::ParseEventHandlers()
             Log::Error << "Invalid event specified: " << node.first << Log::Endl;
             continue;
         }
+        // todo: parse event args
         // Go through all functions for the event
         for(auto func : node.second.ToList())
         {
